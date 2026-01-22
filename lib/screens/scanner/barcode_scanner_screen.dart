@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:go_router/go_router.dart';
 import '../../providers/book_provider.dart';
 import '../../providers/service_providers.dart';
 import '../../models/book.dart';
@@ -100,12 +99,10 @@ class _BarcodeScannerScreenState extends ConsumerState<BarcodeScannerScreen> {
               backgroundColor: Colors.green,
             ),
           );
-          context.pop();
         }
-      } else {
-        // Resume scanning if cancelled
-        _controller.start();
       }
+      // Resume scanning
+      _controller.start();
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

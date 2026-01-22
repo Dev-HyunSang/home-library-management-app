@@ -55,4 +55,11 @@ class AuthService {
     final response = await _apiClient.dio.post(ApiConfig.me);
     return User.fromJson(response.data);
   }
+
+  Future<void> requestPasswordReset(String email) async {
+    await _apiClient.dio.post(
+      ApiConfig.forgotPassword,
+      data: {'email': email},
+    );
+  }
 }

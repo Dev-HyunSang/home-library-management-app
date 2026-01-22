@@ -9,6 +9,7 @@ class ApiConfig {
   static const String me = '/api/users/me';
   static const String refreshToken = '/api/auth/refresh';
   static const String checkNickname = '/api/users/check-nickname';
+  static const String forgotPassword = '/api/users/forgot-password';
 
   // Book Endpoints
   static const String searchBook = '/api/books/search';
