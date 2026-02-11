@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +17,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -26,35 +29,56 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
+    setState(() => _isLoading = true);
+
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
     try {
-      await ref.read(authNotifierProvider.notifier).signIn(email, password);
+      await ref
+          .read(authNotifierProvider.notifier)
+          .signIn(email, password)
+          .timeout(const Duration(seconds: 10));
 
       if (mounted) {
         final authState = ref.read(authNotifierProvider);
         if (authState.hasValue && authState.value != null) {
           context.go('/home');
         } else if (authState.hasError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('로그인 실패: ${authState.error}')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('올바르지 않은 메일 주소 혹은 비밀번호입니다'),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
+      }
+    } on TimeoutException {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('서버 응답이 지연되고 있습니다. 다시 시도해주세요')),
+        );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('로그인 중 오류가 발생했습니다: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('올바르지 않은 메일 주소 혹은 비밀번호입니다'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authNotifierProvider);
-    final isLoading = authState.isLoading;
+    ref.watch(authNotifierProvider);
+    final isLoading = _isLoading;
 
     return Scaffold(
       backgroundColor: Colors.white,

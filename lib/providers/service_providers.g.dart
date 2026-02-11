@@ -23,7 +23,7 @@ final storageServiceProvider = AutoDisposeProvider<StorageService>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef StorageServiceRef = AutoDisposeProviderRef<StorageService>;
-String _$apiClientHash() => r'f5b9cca00bc76e3c7e04bb0d0475ddc887064a54';
+String _$apiClientHash() => r'501c30d12740956ee4d368b5deea615c97cb6327';
 
 /// See also [apiClient].
 @ProviderFor(apiClient)
@@ -74,5 +74,22 @@ final bookServiceProvider = AutoDisposeProvider<BookService>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef BookServiceRef = AutoDisposeProviderRef<BookService>;
+String _$reviewServiceHash() => r'f051d5ee87c24bf0a5d526c8c3c9a57d4297c08f';
+
+/// See also [reviewService].
+@ProviderFor(reviewService)
+final reviewServiceProvider = AutoDisposeProvider<ReviewService>.internal(
+  reviewService,
+  name: r'reviewServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$reviewServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ReviewServiceRef = AutoDisposeProviderRef<ReviewService>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -47,4 +47,24 @@ class BookList extends _$BookList {
     await bookService.deleteBook(bookId);
     await refresh();
   }
+
+  Future<void> updateBook({
+    required String bookId,
+    String? title,
+    String? author,
+    String? bookIsbn,
+    String? thumbnailUrl,
+    int? status,
+  }) async {
+    final bookService = ref.read(bookServiceProvider);
+    await bookService.updateBook(
+      bookId: bookId,
+      title: title,
+      author: author,
+      bookIsbn: bookIsbn,
+      thumbnailUrl: thumbnailUrl,
+      status: status,
+    );
+    await refresh();
+  }
 }

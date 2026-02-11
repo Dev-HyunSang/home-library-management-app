@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../home/home_screen.dart';
-import '../scanner/barcode_scanner_screen.dart';
+import '../review/my_reviews_screen.dart';
 import '../settings/settings_screen.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
@@ -21,7 +21,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         index: _currentIndex,
         children: const [
           HomeScreen(),
-          BarcodeScannerScreen(),
+          MyReviewsScreen(),
           SettingsScreen(),
         ],
       ),
@@ -39,9 +39,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             label: '홈',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.qr_code_scanner_outlined),
-            activeIcon: Icon(Icons.qr_code_scanner),
-            label: '스캔',
+            icon: Icon(Icons.rate_review_outlined),
+            activeIcon: Icon(Icons.rate_review),
+            label: '내 리뷰',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings_outlined),

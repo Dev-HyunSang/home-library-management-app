@@ -53,6 +53,36 @@ class BookService {
     return [];
   }
 
+  Future<Book> updateBook({
+    required String bookId,
+    String? title,
+    String? author,
+    String? bookIsbn,
+    String? thumbnailUrl,
+    int? status,
+  }) async {
+    final data = <String, dynamic>{};
+    if (title != null) data['title'] = title;
+    if (author != null) data['author'] = author;
+    if (bookIsbn != null) data['book_isbn'] = bookIsbn;
+    if (thumbnailUrl != null) data['thumbnail_url'] = thumbnailUrl;
+    if (status != null) data['status'] = status;
+
+    final response = await _apiClient.dio.put(
+      ApiConfig.fullUpdateBookUrl(bookId),
+      data: data,
+    );
+
+    if (response.data is Map<String, dynamic>) {
+      final responseData = response.data['data'];
+      if (responseData != null) {
+        return Book.fromJson(responseData);
+      }
+    }
+
+    throw Exception('도서 수정에 실패했습니다');
+  }
+
   Future<void> deleteBook(String bookId) async {
     await _apiClient.dio.delete(ApiConfig.fullDeleteBookUrl(bookId));
   }
