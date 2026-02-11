@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/book.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/book_provider.dart';
 import '../../providers/review_provider.dart';
 
 class BookDetailScreen extends ConsumerStatefulWidget {
@@ -16,87 +17,155 @@ class BookDetailScreen extends ConsumerStatefulWidget {
 class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    final reviewsAsync = ref.watch(bookReviewsProvider(widget.book.bookIsbn));
     final currentUser = ref.watch(authNotifierProvider).value;
+
+    // Fetch book details from API if userId and bookId are available
+    final bookDetailAsync = widget.book.userId != null && widget.book.id != null
+        ? ref.watch(bookDetailProvider(widget.book.userId!, widget.book.id!))
+        : null;
+
+    final book = bookDetailAsync?.value ?? widget.book;
+    final reviewsAsync = ref.watch(bookReviewsProvider(book.bookIsbn));
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('도서 상세'),
+        actions: [
+          if (bookDetailAsync != null)
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () {
+                ref.invalidate(bookDetailProvider(widget.book.userId!, widget.book.id!));
+              },
+            ),
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showReviewDialog(context),
+        onPressed: () => _showReviewDialog(context, book),
         icon: const Icon(Icons.edit),
         label: const Text('리뷰 작성'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Book Info Section
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (widget.book.thumbnailUrl != null)
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        widget.book.thumbnailUrl!,
-                        width: 100,
-                        height: 140,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            width: 100,
-                            height: 140,
-                            color: Colors.grey.shade200,
-                            child: const Icon(Icons.book, size: 40),
-                          );
-                        },
-                      ),
-                    )
-                  else
-                    Container(
+      body: bookDetailAsync != null
+          ? bookDetailAsync.when(
+              data: (fetchedBook) => _buildContent(fetchedBook, reviewsAsync, currentUser),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                    const SizedBox(height: 16),
+                    Text('오류가 발생했습니다', style: Theme.of(context).textTheme.titleMedium),
+                    const SizedBox(height: 8),
+                    Text(error.toString(), style: TextStyle(color: Colors.grey.shade600)),
+                  ],
+                ),
+              ),
+            )
+          : _buildContent(book, reviewsAsync, currentUser),
+    );
+  }
+
+  Widget _buildContent(Book book, AsyncValue<List<dynamic>> reviewsAsync, dynamic currentUser) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Book Info Section
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (book.thumbnailUrl != null)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      book.thumbnailUrl!,
                       width: 100,
                       height: 140,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(Icons.book, size: 40),
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          width: 100,
+                          height: 140,
+                          color: Colors.grey.shade200,
+                          child: const Icon(Icons.book, size: 40),
+                        );
+                      },
                     ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.book.title,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                  )
+                else
+                  Container(
+                    width: 100,
+                    height: 140,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(Icons.book, size: 40),
+                  ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        book.title,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          widget.book.author,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Colors.grey.shade600,
-                          ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        book.author,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Colors.grey.shade600,
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'ISBN: ${widget.book.bookIsbn}',
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          'ISBN: ${book.bookIsbn}',
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey.shade500,
+                            color: Colors.grey.shade700,
+                            fontFamily: 'monospace',
                           ),
+                        ),
+                      ),
+                      if (book.createdAt != null) ...[
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.calendar_today,
+                              size: 14,
+                              color: Colors.grey.shade500,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '추가: ${_formatDate(book.createdAt!)}',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Colors.grey.shade500,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+          ),
             const Divider(height: 1),
             // Reviews Section
             Padding(
@@ -111,20 +180,31 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
             reviewsAsync.when(
               data: (reviews) {
                 if (reviews.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                  return Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.rate_review_outlined,
-                          size: 48,
-                          color: Colors.grey.shade400,
+                          size: 64,
+                          color: Colors.grey.shade300,
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 16),
                         Text(
                           '아직 리뷰가 없습니다',
                           style: TextStyle(
-                            color: Colors.grey.shade600,
+                            fontSize: 16,
+                            color: Colors.grey.shade500,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '첫 번째 리뷰를 작성해보세요!',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey.shade400,
                           ),
                         ),
                       ],
@@ -239,11 +319,10 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
             const SizedBox(height: 80),
           ],
         ),
-      ),
-    );
+      );
   }
 
-  void _showReviewDialog(BuildContext context) {
+  void _showReviewDialog(BuildContext context, Book book) {
     final contentController = TextEditingController();
     int selectedRating = 5;
     bool isPublic = true;
@@ -336,7 +415,7 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
 
                     try {
                       await ref
-                          .read(bookReviewsProvider(widget.book.bookIsbn).notifier)
+                          .read(bookReviewsProvider(book.bookIsbn).notifier)
                           .createReview(
                             content: contentController.text.trim(),
                             rating: selectedRating,

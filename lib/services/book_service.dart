@@ -53,6 +53,21 @@ class BookService {
     return [];
   }
 
+  Future<Book> getBook(String userId, String bookId) async {
+    final response = await _apiClient.dio.get(
+      ApiConfig.fullGetBookUrl(userId, bookId),
+    );
+
+    if (response.data is Map<String, dynamic>) {
+      final data = response.data['data'];
+      if (data != null) {
+        return Book.fromJson(data);
+      }
+    }
+
+    throw Exception('도서 정보를 가져올 수 없습니다');
+  }
+
   Future<Book> updateBook({
     required String bookId,
     String? title,

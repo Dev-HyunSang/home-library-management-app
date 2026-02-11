@@ -17,6 +17,7 @@ class ApiConfig {
   static const String searchBook = '/api/books/search';
   static const String addBook = '/api/books/add';
   static const String getBooks = '/api/books/get';
+  static const String getBook = '/api/books/get';
   static const String updateBook = '/api/books/update';
   static const String deleteBook = '/api/books/delete';
 
@@ -33,6 +34,8 @@ class ApiConfig {
   static String get fullSearchBookUrl => '$baseUrl$searchBook';
   static String get fullAddBookUrl => '$baseUrl$addBook';
   static String get fullGetBooksUrl => '$baseUrl$getBooks';
+  static String fullGetBookUrl(String userId, String bookId) =>
+      '$baseUrl$getBook/$userId/$bookId';
 
   static String fullUpdateBookUrl(String bookId) =>
       '$baseUrl$updateBook/$bookId';

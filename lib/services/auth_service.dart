@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 import '../config/api_config.dart';
 import '../models/auth_request.dart';
 import '../models/auth_response.dart';
@@ -19,31 +21,43 @@ class AuthService {
   }
 
   Future<User> signUp(RegisterRequest request) async {
-    final response = await _apiClient.dio.post(
-      ApiConfig.signUp,
-      data: request.toJson(),
-    );
-
-    return User.fromJson(response.data);
-  }
-
-  Future<bool> checkNickname(String nickname) async {
     try {
       final response = await _apiClient.dio.post(
-        ApiConfig.checkNickname,
-        data: {'nickname': nickname},
+        ApiConfig.signUp,
+        data: request.toJson(),
       );
-      // Assuming 200 OK means available, and body contains a boolean or status
-      // Adjust based on actual API response. For now assuming { "available": true }
-      // or just 200 OK.
-      // Let's assume standard response format: { "data": { "available": true } }
 
-      if (response.data is Map && response.data['data'] != null) {
-        return response.data['data']['isAvailable'] == true;
+      return User.fromJson(response.data);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 409) {
+        throw Exception('동일한 메일 주소가 이미 사용중입니다.');
       }
-      return true; // Fallback or strict? Let's check user intent later.
+      throw Exception('회원가입에 실패했습니다');
+    }
+  }
+
+  Future<({bool isAvailable, String message})> checkNickname(
+      String nickname) async {
+    try {
+      final response = await _apiClient.dio.get(
+        ApiConfig.checkNickname,
+        queryParameters: {'nickname': nickname},
+      );
+
+      if (response.data is Map) {
+        final isSuccess = response.data['is_success'] == true;
+        final message = (response.data['message'] ?? '') as String;
+        return (isAvailable: isSuccess, message: message);
+      }
+      return (isAvailable: false, message: '알 수 없는 오류가 발생했습니다');
+    } on DioException catch (e) {
+      if (e.response?.data is Map) {
+        final message = (e.response?.data['message'] ?? '') as String;
+        return (isAvailable: false, message: message);
+      }
+      return (isAvailable: false, message: '서버 연결에 실패했습니다');
     } catch (e) {
-      return false; // Error means not available or server error
+      return (isAvailable: false, message: '오류가 발생했습니다');
     }
   }
 
@@ -61,5 +75,28 @@ class AuthService {
       ApiConfig.forgotPassword,
       data: {'email': email},
     );
+  }
+
+  Future<void> sendVerificationEmail(String email) async {
+    try {
+      await _apiClient.dio.get(ApiConfig.fullVerifyEmailUrl(email));
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 409) {
+        throw Exception('이미 사용 중인 이메일입니다.');
+      }
+      throw Exception('인증 메일 발송에 실패했습니다');
+    }
+  }
+
+  Future<bool> verifyEmailCode(String email, String code) async {
+    final response = await _apiClient.dio.post(
+      ApiConfig.verifyCode,
+      data: {'email': email, 'code': code},
+    );
+
+    if (response.data is Map) {
+      return response.data['is_success'] == true;
+    }
+    return false;
   }
 }

@@ -5,8 +5,10 @@ import 'storage_service.dart';
 class ApiClient {
   late final Dio _dio;
   final StorageService _storageService;
+  final void Function()? onTokenExpired;
+  bool _isRefreshing = false;
 
-  ApiClient(this._storageService) {
+  ApiClient(this._storageService, {this.onTokenExpired}) {
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiConfig.baseUrl,
@@ -29,31 +31,42 @@ class ApiClient {
           return handler.next(options);
         },
         onError: (error, handler) async {
-          if (error.response?.statusCode == 401) {
-            // Token expired, try to refresh
-            final refreshed = await _refreshToken();
-            if (refreshed) {
-              // Retry the original request
-              final opts = Options(
-                method: error.requestOptions.method,
-                headers: error.requestOptions.headers,
-              );
-              final token = await _storageService.getAccessToken();
-              if (token != null) {
-                opts.headers?['Authorization'] = 'Bearer $token';
-              }
+          // Skip refresh logic for refresh token endpoint itself
+          if (error.requestOptions.path == ApiConfig.refreshToken) {
+            return handler.next(error);
+          }
 
-              try {
-                final response = await _dio.request(
-                  error.requestOptions.path,
-                  options: opts,
-                  data: error.requestOptions.data,
-                  queryParameters: error.requestOptions.queryParameters,
-                );
-                return handler.resolve(response);
-              } catch (e) {
-                return handler.reject(error);
-              }
+          if (error.response?.statusCode == 401 && !_isRefreshing) {
+            _isRefreshing = true;
+            final refreshed = await _refreshToken();
+            _isRefreshing = false;
+
+            if (!refreshed) {
+              await _storageService.deleteTokens();
+              onTokenExpired?.call();
+              return handler.next(error);
+            }
+
+            // Retry the original request
+            final opts = Options(
+              method: error.requestOptions.method,
+              headers: Map<String, dynamic>.from(error.requestOptions.headers),
+            );
+            final token = await _storageService.getAccessToken();
+            if (token != null) {
+              opts.headers?['Authorization'] = 'Bearer $token';
+            }
+
+            try {
+              final response = await _dio.request(
+                error.requestOptions.path,
+                options: opts,
+                data: error.requestOptions.data,
+                queryParameters: error.requestOptions.queryParameters,
+              );
+              return handler.resolve(response);
+            } catch (e) {
+              return handler.reject(error);
             }
           }
           return handler.next(error);
@@ -85,7 +98,7 @@ class ApiClient {
         data: {'refresh_token': refreshToken},
         options: Options(
           headers: {
-            'Authorization': null, // Don't send old access token
+            'Authorization': null,
           },
         ),
       );
@@ -102,7 +115,6 @@ class ApiClient {
       }
       return false;
     } catch (e) {
-      await _storageService.deleteTokens();
       return false;
     }
   }

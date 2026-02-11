@@ -5,6 +5,12 @@ import 'service_providers.dart';
 part 'book_provider.g.dart';
 
 @riverpod
+Future<Book> bookDetail(BookDetailRef ref, String userId, String bookId) async {
+  final bookService = ref.watch(bookServiceProvider);
+  return await bookService.getBook(userId, bookId);
+}
+
+@riverpod
 class BookList extends _$BookList {
   @override
   Future<List<Book>> build() async {
