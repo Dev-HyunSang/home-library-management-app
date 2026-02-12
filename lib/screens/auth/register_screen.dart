@@ -128,6 +128,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   controller: _nickNameController,
                   label: '닉네임',
                   hint: '사용할 닉네임을 입력하세요',
+                  helperText: '영어 소문자, 숫자, _ 만 사용 가능',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return '닉네임을 입력해주세요';

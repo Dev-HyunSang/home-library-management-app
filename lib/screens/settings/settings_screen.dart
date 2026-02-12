@@ -72,9 +72,7 @@ class SettingsScreen extends ConsumerWidget {
             icon: Icons.description_outlined,
             title: '이용약관',
             onTap: () {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text('이용약관 페이지 준비 중입니다')));
+              context.push('/terms?readOnly=true');
             },
           ),
           _buildMenuItem(

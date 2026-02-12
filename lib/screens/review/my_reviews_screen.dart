@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/review.dart';
 import '../../providers/review_provider.dart';
+import '../../widgets/common/book_info_widget.dart';
 
 class MyReviewsScreen extends ConsumerWidget {
   const MyReviewsScreen({super.key});
@@ -83,14 +84,12 @@ class MyReviewsScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: Text(
-                              'ISBN: ${review.bookIsbn ?? "알 수 없음"}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey.shade600,
-                              ),
+                            child: BookInfoWidget(
+                              title: review.bookTitle,
+                              author: review.bookAuthor,
                             ),
                           ),
                           Container(

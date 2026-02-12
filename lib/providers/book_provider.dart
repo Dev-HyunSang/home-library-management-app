@@ -22,7 +22,9 @@ class BookList extends _$BookList {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final bookService = ref.read(bookServiceProvider);
-      return await bookService.getBooks();
+      final books = await bookService.getBooks();
+
+      return books;
     });
   }
 

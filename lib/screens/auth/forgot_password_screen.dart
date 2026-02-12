@@ -79,27 +79,27 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            '비밀번호 재설정',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            '임시 비밀번호 발급',
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
-            '가입한 이메일 주소를 입력하시면\n비밀번호 재설정 링크를 보내드립니다.',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Colors.grey,
-            ),
+            '가입한 이메일 주소를 입력하시면\n임시 비밀번호를 보내드립니다.',
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
           ),
           const SizedBox(height: 32),
           CustomTextField(
             controller: _emailController,
-            label: '이메일',
+            label: '가입한 이메일',
             hint: 'example@email.com',
             keyboardType: TextInputType.emailAddress,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return '이메일을 입력해주세요';
+                return '가입하신 이메일을 입력해주세요';
               }
               final emailRegex = RegExp(
                 r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
@@ -112,7 +112,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           ),
           const SizedBox(height: 24),
           CustomButton(
-            text: '비밀번호 재설정 링크 보내기',
+            text: '임시 비밀번호 발급',
             onPressed: _handlePasswordReset,
             isLoading: _isLoading,
           ),
@@ -133,24 +133,21 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         const SizedBox(height: 24),
         Text(
           '이메일을 확인해주세요',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 8),
         Text(
           '${_emailController.text}로\n비밀번호 재설정 링크를 보냈습니다.',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Colors.grey,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 32),
-        CustomButton(
-          text: '로그인으로 돌아가기',
-          onPressed: () => context.go('/login'),
-        ),
+        CustomButton(text: '로그인으로 돌아가기', onPressed: () => context.go('/login')),
         const SizedBox(height: 16),
         TextButton(
           onPressed: () {

@@ -15,6 +15,213 @@ final _privateConstructorUsedError = UnsupportedError(
   'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
 );
 
+ReviewBook _$ReviewBookFromJson(Map<String, dynamic> json) {
+  return _ReviewBook.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ReviewBook {
+  String? get title => throw _privateConstructorUsedError;
+  String? get author => throw _privateConstructorUsedError;
+  @JsonKey(name: 'thumbnail_url')
+  String? get thumbnailUrl => throw _privateConstructorUsedError;
+
+  /// Serializes this ReviewBook to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of ReviewBook
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ReviewBookCopyWith<ReviewBook> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ReviewBookCopyWith<$Res> {
+  factory $ReviewBookCopyWith(
+    ReviewBook value,
+    $Res Function(ReviewBook) then,
+  ) = _$ReviewBookCopyWithImpl<$Res, ReviewBook>;
+  @useResult
+  $Res call({
+    String? title,
+    String? author,
+    @JsonKey(name: 'thumbnail_url') String? thumbnailUrl,
+  });
+}
+
+/// @nodoc
+class _$ReviewBookCopyWithImpl<$Res, $Val extends ReviewBook>
+    implements $ReviewBookCopyWith<$Res> {
+  _$ReviewBookCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of ReviewBook
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? title = freezed,
+    Object? author = freezed,
+    Object? thumbnailUrl = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            title: freezed == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            author: freezed == author
+                ? _value.author
+                : author // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            thumbnailUrl: freezed == thumbnailUrl
+                ? _value.thumbnailUrl
+                : thumbnailUrl // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$ReviewBookImplCopyWith<$Res>
+    implements $ReviewBookCopyWith<$Res> {
+  factory _$$ReviewBookImplCopyWith(
+    _$ReviewBookImpl value,
+    $Res Function(_$ReviewBookImpl) then,
+  ) = __$$ReviewBookImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    String? title,
+    String? author,
+    @JsonKey(name: 'thumbnail_url') String? thumbnailUrl,
+  });
+}
+
+/// @nodoc
+class __$$ReviewBookImplCopyWithImpl<$Res>
+    extends _$ReviewBookCopyWithImpl<$Res, _$ReviewBookImpl>
+    implements _$$ReviewBookImplCopyWith<$Res> {
+  __$$ReviewBookImplCopyWithImpl(
+    _$ReviewBookImpl _value,
+    $Res Function(_$ReviewBookImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of ReviewBook
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? title = freezed,
+    Object? author = freezed,
+    Object? thumbnailUrl = freezed,
+  }) {
+    return _then(
+      _$ReviewBookImpl(
+        title: freezed == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        author: freezed == author
+            ? _value.author
+            : author // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        thumbnailUrl: freezed == thumbnailUrl
+            ? _value.thumbnailUrl
+            : thumbnailUrl // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ReviewBookImpl implements _ReviewBook {
+  const _$ReviewBookImpl({
+    this.title,
+    this.author,
+    @JsonKey(name: 'thumbnail_url') this.thumbnailUrl,
+  });
+
+  factory _$ReviewBookImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ReviewBookImplFromJson(json);
+
+  @override
+  final String? title;
+  @override
+  final String? author;
+  @override
+  @JsonKey(name: 'thumbnail_url')
+  final String? thumbnailUrl;
+
+  @override
+  String toString() {
+    return 'ReviewBook(title: $title, author: $author, thumbnailUrl: $thumbnailUrl)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ReviewBookImpl &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.author, author) || other.author == author) &&
+            (identical(other.thumbnailUrl, thumbnailUrl) ||
+                other.thumbnailUrl == thumbnailUrl));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, title, author, thumbnailUrl);
+
+  /// Create a copy of ReviewBook
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ReviewBookImplCopyWith<_$ReviewBookImpl> get copyWith =>
+      __$$ReviewBookImplCopyWithImpl<_$ReviewBookImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ReviewBookImplToJson(this);
+  }
+}
+
+abstract class _ReviewBook implements ReviewBook {
+  const factory _ReviewBook({
+    final String? title,
+    final String? author,
+    @JsonKey(name: 'thumbnail_url') final String? thumbnailUrl,
+  }) = _$ReviewBookImpl;
+
+  factory _ReviewBook.fromJson(Map<String, dynamic> json) =
+      _$ReviewBookImpl.fromJson;
+
+  @override
+  String? get title;
+  @override
+  String? get author;
+  @override
+  @JsonKey(name: 'thumbnail_url')
+  String? get thumbnailUrl;
+
+  /// Create a copy of ReviewBook
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ReviewBookImplCopyWith<_$ReviewBookImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 Review _$ReviewFromJson(Map<String, dynamic> json) {
   return _Review.fromJson(json);
 }
@@ -30,6 +237,7 @@ mixin _$Review {
   String? get bookIsbn => throw _privateConstructorUsedError;
   @JsonKey(name: 'book_id')
   String? get bookId => throw _privateConstructorUsedError;
+  ReviewBook? get book => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   int get rating => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_public')
@@ -59,12 +267,15 @@ abstract class $ReviewCopyWith<$Res> {
     @JsonKey(name: 'owner_nickname') String? ownerNickname,
     @JsonKey(name: 'book_isbn') String? bookIsbn,
     @JsonKey(name: 'book_id') String? bookId,
+    ReviewBook? book,
     String content,
     int rating,
     @JsonKey(name: 'is_public') bool isPublic,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
   });
+
+  $ReviewBookCopyWith<$Res>? get book;
 }
 
 /// @nodoc
@@ -87,6 +298,7 @@ class _$ReviewCopyWithImpl<$Res, $Val extends Review>
     Object? ownerNickname = freezed,
     Object? bookIsbn = freezed,
     Object? bookId = freezed,
+    Object? book = freezed,
     Object? content = null,
     Object? rating = null,
     Object? isPublic = null,
@@ -115,6 +327,10 @@ class _$ReviewCopyWithImpl<$Res, $Val extends Review>
                 ? _value.bookId
                 : bookId // ignore: cast_nullable_to_non_nullable
                       as String?,
+            book: freezed == book
+                ? _value.book
+                : book // ignore: cast_nullable_to_non_nullable
+                      as ReviewBook?,
             content: null == content
                 ? _value.content
                 : content // ignore: cast_nullable_to_non_nullable
@@ -139,6 +355,20 @@ class _$ReviewCopyWithImpl<$Res, $Val extends Review>
           as $Val,
     );
   }
+
+  /// Create a copy of Review
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ReviewBookCopyWith<$Res>? get book {
+    if (_value.book == null) {
+      return null;
+    }
+
+    return $ReviewBookCopyWith<$Res>(_value.book!, (value) {
+      return _then(_value.copyWith(book: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -155,12 +385,16 @@ abstract class _$$ReviewImplCopyWith<$Res> implements $ReviewCopyWith<$Res> {
     @JsonKey(name: 'owner_nickname') String? ownerNickname,
     @JsonKey(name: 'book_isbn') String? bookIsbn,
     @JsonKey(name: 'book_id') String? bookId,
+    ReviewBook? book,
     String content,
     int rating,
     @JsonKey(name: 'is_public') bool isPublic,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
   });
+
+  @override
+  $ReviewBookCopyWith<$Res>? get book;
 }
 
 /// @nodoc
@@ -182,6 +416,7 @@ class __$$ReviewImplCopyWithImpl<$Res>
     Object? ownerNickname = freezed,
     Object? bookIsbn = freezed,
     Object? bookId = freezed,
+    Object? book = freezed,
     Object? content = null,
     Object? rating = null,
     Object? isPublic = null,
@@ -210,6 +445,10 @@ class __$$ReviewImplCopyWithImpl<$Res>
             ? _value.bookId
             : bookId // ignore: cast_nullable_to_non_nullable
                   as String?,
+        book: freezed == book
+            ? _value.book
+            : book // ignore: cast_nullable_to_non_nullable
+                  as ReviewBook?,
         content: null == content
             ? _value.content
             : content // ignore: cast_nullable_to_non_nullable
@@ -237,19 +476,20 @@ class __$$ReviewImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ReviewImpl implements _Review {
+class _$ReviewImpl extends _Review {
   const _$ReviewImpl({
     this.id,
     @JsonKey(name: 'owner_id') this.ownerId,
     @JsonKey(name: 'owner_nickname') this.ownerNickname,
     @JsonKey(name: 'book_isbn') this.bookIsbn,
     @JsonKey(name: 'book_id') this.bookId,
+    this.book,
     required this.content,
     required this.rating,
     @JsonKey(name: 'is_public') this.isPublic = true,
     @JsonKey(name: 'created_at') this.createdAt,
     @JsonKey(name: 'updated_at') this.updatedAt,
-  });
+  }) : super._();
 
   factory _$ReviewImpl.fromJson(Map<String, dynamic> json) =>
       _$$ReviewImplFromJson(json);
@@ -269,6 +509,8 @@ class _$ReviewImpl implements _Review {
   @JsonKey(name: 'book_id')
   final String? bookId;
   @override
+  final ReviewBook? book;
+  @override
   final String content;
   @override
   final int rating;
@@ -284,7 +526,7 @@ class _$ReviewImpl implements _Review {
 
   @override
   String toString() {
-    return 'Review(id: $id, ownerId: $ownerId, ownerNickname: $ownerNickname, bookIsbn: $bookIsbn, bookId: $bookId, content: $content, rating: $rating, isPublic: $isPublic, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Review(id: $id, ownerId: $ownerId, ownerNickname: $ownerNickname, bookIsbn: $bookIsbn, bookId: $bookId, book: $book, content: $content, rating: $rating, isPublic: $isPublic, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -299,6 +541,7 @@ class _$ReviewImpl implements _Review {
             (identical(other.bookIsbn, bookIsbn) ||
                 other.bookIsbn == bookIsbn) &&
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
+            (identical(other.book, book) || other.book == book) &&
             (identical(other.content, content) || other.content == content) &&
             (identical(other.rating, rating) || other.rating == rating) &&
             (identical(other.isPublic, isPublic) ||
@@ -318,6 +561,7 @@ class _$ReviewImpl implements _Review {
     ownerNickname,
     bookIsbn,
     bookId,
+    book,
     content,
     rating,
     isPublic,
@@ -339,19 +583,21 @@ class _$ReviewImpl implements _Review {
   }
 }
 
-abstract class _Review implements Review {
+abstract class _Review extends Review {
   const factory _Review({
     final String? id,
     @JsonKey(name: 'owner_id') final String? ownerId,
     @JsonKey(name: 'owner_nickname') final String? ownerNickname,
     @JsonKey(name: 'book_isbn') final String? bookIsbn,
     @JsonKey(name: 'book_id') final String? bookId,
+    final ReviewBook? book,
     required final String content,
     required final int rating,
     @JsonKey(name: 'is_public') final bool isPublic,
     @JsonKey(name: 'created_at') final DateTime? createdAt,
     @JsonKey(name: 'updated_at') final DateTime? updatedAt,
   }) = _$ReviewImpl;
+  const _Review._() : super._();
 
   factory _Review.fromJson(Map<String, dynamic> json) = _$ReviewImpl.fromJson;
 
@@ -369,6 +615,8 @@ abstract class _Review implements Review {
   @override
   @JsonKey(name: 'book_id')
   String? get bookId;
+  @override
+  ReviewBook? get book;
   @override
   String get content;
   @override

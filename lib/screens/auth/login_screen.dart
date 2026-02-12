@@ -92,7 +92,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 48),
                   Text(
                     '나만의 서재',
                     style: Theme.of(context).textTheme.headlineLarge,
@@ -100,7 +99,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '나만의 서재를 관리하세요',
+                    '나만의 서재를 통해서 책을 관리하고\n독후감을 기록하고 공유해 보세요!',
                     style: Theme.of(context).textTheme.bodyMedium,
                     textAlign: TextAlign.center,
                   ),
@@ -149,20 +148,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 8),
-                  Align(
-                    alignment: Alignment.center,
-                    child: TextButton(
-                      onPressed: () => context.push('/forgot-password'),
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                      ),
-                      child: const Text('비밀번호 찾기'),
-                    ),
-                  ),
                   const SizedBox(height: 24),
                   SizedBox(
                     height: 50,
@@ -194,7 +179,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 48),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '비밀번호를 잊으셨나요?',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      TextButton(
+                        onPressed: () => context.push('/forgot-password'),
+                        child: const Text('비밀번호 찾기'),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

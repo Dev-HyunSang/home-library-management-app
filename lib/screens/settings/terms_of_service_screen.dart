@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class TermsScreen extends StatelessWidget {
-  const TermsScreen({super.key});
+class TermsOfServiceScreen extends StatelessWidget {
+  final bool isReadOnly;
+
+  const TermsOfServiceScreen({super.key, this.isReadOnly = false});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('이용약관'),
-      ),
+      appBar: AppBar(title: const Text('이용약관')),
       body: Column(
         children: [
           Expanded(
@@ -22,8 +22,8 @@ class TermsScreen extends StatelessWidget {
                     Text(
                       '서비스 이용약관',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     Text(
@@ -73,40 +73,41 @@ class TermsScreen extends StatelessWidget {
 부칙
 이 약관은 2024년 1월 1일부터 시행됩니다.
 ''',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            height: 1.6,
-                          ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(height: 1.6),
                     ),
                   ],
                 ),
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.shade200,
-                  offset: const Offset(0, -2),
-                  blurRadius: 4,
-                ),
-              ],
-            ),
-            child: SafeArea(
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
-                  child: const Text('동의하고 계속하기'),
+          if (!isReadOnly)
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade200,
+                    offset: const Offset(0, -2),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
+              child: SafeArea(
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                    child: const Text('동의하고 계속하기'),
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );

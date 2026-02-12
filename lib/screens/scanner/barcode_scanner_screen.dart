@@ -18,6 +18,8 @@ class _BarcodeScannerScreenState extends ConsumerState<BarcodeScannerScreen> {
   final TextEditingController _isbnController = TextEditingController();
   bool _isProcessing = false;
   bool _showManualInput = false;
+  Book? _searchedBook;
+  bool _isSearched = false;
 
   @override
   void dispose() {
@@ -172,11 +174,19 @@ class _BarcodeScannerScreenState extends ConsumerState<BarcodeScannerScreen> {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'ISBN 바코드를 스캔하세요',
+                  'ISBN 바코드를 스캔하세요!',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '등록하려는 책 뒷면의 바코드를 스캔하세요!',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.7),
+                    fontSize: 14,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -210,11 +220,7 @@ class _BarcodeScannerScreenState extends ConsumerState<BarcodeScannerScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.book,
-                size: 80,
-                color: Colors.blue.shade400,
-              ),
+              Icon(Icons.book, size: 80, color: Colors.blue.shade400),
               const SizedBox(height: 24),
               Text(
                 'ISBN 번호로 검색',
@@ -226,10 +232,7 @@ class _BarcodeScannerScreenState extends ConsumerState<BarcodeScannerScreen> {
               const SizedBox(height: 12),
               Text(
                 '도서의 ISBN 번호를 입력하세요',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
               ),
               const SizedBox(height: 32),
               Container(
@@ -306,7 +309,8 @@ class _BarcodeScannerScreenState extends ConsumerState<BarcodeScannerScreen> {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.info_outline,
+                        Icon(
+                          Icons.info_outline,
                           size: 20,
                           color: Colors.blue.shade700,
                         ),
@@ -348,7 +352,9 @@ class _BarcodeScannerScreenState extends ConsumerState<BarcodeScannerScreen> {
         title: const Text('바코드 스캔'),
         actions: [
           IconButton(
-            icon: Icon(_showManualInput ? Icons.qr_code_scanner : Icons.keyboard),
+            icon: Icon(
+              _showManualInput ? Icons.qr_code_scanner : Icons.keyboard,
+            ),
             tooltip: _showManualInput ? '스캔 모드' : '수동 입력',
             onPressed: () {
               setState(() {

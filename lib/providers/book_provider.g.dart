@@ -157,7 +157,7 @@ class _BookDetailProviderElement extends AutoDisposeFutureProviderElement<Book>
   String get bookId => (origin as BookDetailProvider).bookId;
 }
 
-String _$bookListHash() => r'51ca9eb33704749f306e5bc823e831ec1d2691d9';
+String _$bookListHash() => r'94c7e1d13c4c46d041eba8eef7e27cd259b3c918';
 
 /// See also [BookList].
 @ProviderFor(BookList)
